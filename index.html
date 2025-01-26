@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SS Clothing Store</title>
+  <style>
+    /* Основные стили */
+    body {
+      font-family: Georgia, serif;
+      margin: 0;
+      padding: 0;
+      background-color: #ffffff;
+      color: #000000;
+      min-height: 100vh;
+    }
+
+    /* Шапка сайта */
+    header {
+      background: #ffffff;
+      color: #000000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 36px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    header nav {
+      display: flex;
+      gap: 15px;
+    }
+
+    header nav a {
+      color: #000000;
+      text-decoration: none;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    header nav a:hover {
+      color: #009900;
+    }
+
+    .logo {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 320px;
+    }
+
+    .logo img {
+      width: 100%;
+      max-width: 1000px;
+      max-height: 350px;
+      object-fit: cover;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    /* Карточки товаров */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .product-card {
+      background: #ffffff;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      transition: box-shadow 0.3s, transform 0.3s;
+      cursor: pointer;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transform: scale(1.03);
+    }
+
+    .product-card img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    .product-card h2 {
+      font-size: 15px;
+      font-weight: bold;
+      margin: 15px 0 5px;
+      color: #000000;
+    }
+
+    .product-card p {
+      font-size: 18px;
+      font-weight: 500;
+      color: #000000;
+    }
+
+    /* Подробное описание товара */
+  .product-detail-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 50px auto;
+  }
+
+  .product-images {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .product-images img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    max-width: 500px;
+  }
+
+  .product-info h1 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .product-info p {
+    margin: 10px 0;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .sizes {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+  }
+
+  .size-button {
+    padding: 10px 20px;
+    border: 1px solid #000000;
+    background: #ffffff;
+    color: #000000;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .size-button.active {
+    background: #000000;
+    color: #ffffff;
+  }
+
+  .add-to-cart {
+    padding: 10px 20px;
+    background: #cccccc;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: not-allowed;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+
+  .add-to-cart.active {
+    background: #000000;
+    cursor: pointer;
+  }
+
+    /* Корзина */
+    .cart {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      color: #000000;
+      border-radius: 50px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .cart-item:hover {
+      transform: scale(1.01);
+    }
+
+    .cart-item img {
+      width: 50px;
+      height: 50px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .cart-item-details {
+      flex: 1;
+      margin-left: 10px;
+    }
+
+    .cart-item-details h3 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .cart-item-details p {
+      font-size: 14px;
+      color: #666666;
+    }
+
+    .remove-item {
+      background: none;
+      border: none;
+      color: #000000;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .remove-item:hover {
+      color: #ff0000;
+    }
+
+    .clear-cart {
+      background: none;
+      border: none;
+      font-size: 20px;
+      font-weight: bold;
+      margin: 15px 0 5px;
+      color: #000000;
+    }
+
+    .clear-cart:hover {
+      color: #009900;
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-controls button {
+      padding: 5px 10px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      cursor: pointer;
+    }
+
+    .quantity-controls button:hover {
+      background-color: #ccc;
+    }
+
+        .cart .checkout-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #000;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .cart .checkout-button:hover {
+            background-color: #444;
+        }
+
+      .main-content {
+          padding-bottom: 80px; /* Отступ снизу, чтобы контент не перекрывался футером */
+      }
+
+
+
+    /* Нижний колонтитул */
+         main {
+            flex-grow: 1; /* Ensures content area grows to push footer down */
+        }
+
+    .content {
+      min-height: 150vh; /* Чтобы была прокрутка */
+      padding: 20px;
+    }
+
+    .footer {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      padding: 81px 20px;
+      font-size: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .footer h1 {
+      font-size: 80px; 
+      margin: 0px 0;
+      color: #fff;
+      opacity: 0;
+      animation: fade-in 3s ease forwards;
+      transform: translateY(100px) rotateX(15deg); /* Больше смещения и вращения */
+      animation: fade-in 4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .footer h2 {
+      font-size: 48px; 
+      margin: 60px 0;
+      color: #fff;
+      opacity: 0;
+      animation: fade-in 3s ease forwards;
+      transform: translateY(100px) rotateX(15deg); /* Больше смещения и вращения */
+      animation: fade-in 4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .footer p {
+      font-size: 15px; 
+      margin: 50px 0;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0;
+      animation: fade-in 3s ease forwards;
+      transform: translateY(100px) rotateX(15deg); /* Больше смещения и вращения */
+      animation: fade-in 4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .footer p:hover {
+      text-decoration: underline;
+    }
+
+    .footer a {
+      font-size: 24px; 
+      margin: 40px 0;
+      color: #fff;
+      text-decoration: none;
+      opacity: 0;
+      animation: fade-in 3s ease forwards;
+      transform: translateY(100px) rotateX(15deg); /* Больше смещения и вращения */
+      animation: fade-in 4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+        transform: translateY(150px) rotateX(20deg); /* Начальное состояние */
+      }
+      50% {
+        opacity: 0.5;
+        transform: translateY(75px) rotateX(10deg); /* Промежуточное состояние */
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) rotateX(0deg); /* Финальное состояние */
+      }
+    }
+
+    @media (max-width: 480px) {
+
+    .footer {
+        padding: 30px 10px;
+      }
+
+      .footer h1 {
+        font-size: 40px; /* Уменьшен размер заголовка */
+        margin: 30px 0;
+      }
+
+      .footer h2 {
+        font-size: 20px; /* Уменьшен размер текста */
+        margin: 30px 0;
+      }
+
+      .footer p {
+        font-size: 10px; /* Уменьшен размер ссылок */
+        margin: 30px 0;
+      }
+
+      .footer a {
+        font-size: 20px; /* Уменьшен размер ссылок */
+        margin: 30px 0;
+      }
+
+      .product-card {
+        padding: 10px;
+      }
+
+      .product-card h2 {
+        font-size: 16px;
+      }
+
+      .product-card p {
+        font-size: 14px;
+      }
+
+      .product-detail-container {
+        padding: 10px;
+      }
+
+      .product-info h1 {
+        font-size: 22px;
+      }
+
+      .product-info p {
+        font-size: 14px;
+      }
+
+      .sizes {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .size-button {
+        font-size: 12px;
+      }
+
+      .add-to-cart {
+        font-size: 14px;
+      }
+
+      .cart-item img {
+        width: 60px;
+        height: 60px;
+      }
+
+      .cart-item-details h3 {
+        font-size: 12px;
+      }
+
+      .cart-item-details p {
+        font-size: 10px;
+      }
+        
+  </style>
+</head>
+<body>
+  <header>
+    <h1 onclick="goHome()">SS</h1>
+    <nav>
+      <a href="#" onclick="goToCart()">Корзина (<span id="cart-count">0</span>)</a>
+    </nav>
+  </header>
+
+  <!-- Главная страница -->
+  <main id="home-page">
+    <div class="logo">
+      <img src="logo1.jpg" alt="Логотип">
+    </div>
+    <section class="products">
+      <div class="product-card" onclick="openProductPage(1)">
+        <img src="tee11.jpg" alt="Товар 1">
+        <h2>SS LOGO TEE in BLACK</h2>
+        <p>2 000 ₽</p>
+      </div>
+      <div class="product-card" onclick="openProductPage(2)">
+        <img src="tee21.jpg" alt="Товар 2">
+        <h2>SS LOGO TEE in WHITE</h2>
+        <p>2 000 ₽</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Страница подробного описания товара -->
+  <main id="product-page-1" style="display:none;">
+    <div class="product-detail">
+      <div class="product-detail-container">
+        <div class="product-images">
+          <a href="tee11.jpg" target="_blank">
+            <img src="tee11.jpg" alt="Основное изображение товара" id="product-main-image-1">
+          </a>
+          <div class="side-images">
+            <a href="tee12.jpg" target="_blank">
+              <img src="tee12.jpg" alt="Дополнительное изображение товара" id="product-secondary-image-1">
+            </a>
+            <a href="size.jpg" target="_blank">
+              <img src="size.jpg" alt="Третье изображение товара" id="product-tertiary-image-1">
+            </a>
+          </div>
+        </div>
+        <div class="product-info">
+          <h1 id="product-title-1">SS LOGO TEE in BLACK</h1>
+          <p id="product-description-1">Saint Secret</p>
+          <p><strong>Цена: <span id="product-price-1">2000</span> ₽</strong></p>
+          <div class="sizes">
+            <button class="size-button" onclick="selectSize(this)">S</button>
+            <button class="size-button" onclick="selectSize(this)">M</button>
+            <button class="size-button" onclick="selectSize(this)">L</button>
+          </div>
+          <button class="add-to-cart" id="add-to-cart-1" disabled onclick="addToCart(1)">Добавить в корзину</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <main id="product-page-2" style="display:none;">
+    <div class="product-detail">
+      <div class="product-detail-container">
+        <div class="product-images">
+          <a href="tee21.jpg" target="_blank">
+            <img src="tee21.jpg" alt="Основное изображение товара" id="product-main-image-2">
+          </a>
+          <div class="side-images">
+            <a href="tee22.jpg" target="_blank">
+              <img src="tee22.jpg" alt="Дополнительное изображение товара" id="product-secondary-image-2">
+            </a>
+            <a href="size.jpg" target="_blank">
+              <img src="size.jpg" alt="Третье изображение товара" id="product-tertiary-image-2">
+            </a>
+          </div>
+        </div>
+        <div class="product-info">
+          <h1 id="product-title-2">SS LOGO TEE in WHITE</h1>
+          <p id="product-description-2">Saint Secret</p>
+          <p><strong>Цена: <span id="product-price-2">2000</span> ₽</strong></p>
+          <div class="sizes">
+            <button class="size-button" onclick="selectSize(this)">S</button>
+            <button class="size-button" onclick="selectSize(this)">M</button>
+            <button class="size-button" onclick="selectSize(this)">L</button>
+          </div>
+          <button class="add-to-cart" id="add-to-cart-2" disabled onclick="addToCart(2)">Добавить в корзину</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Страница корзины -->
+  <main id="cart-page" style="display:none;">
+    <section class="cart">
+      <div class="cart-header">
+        <h2>Корзина</h2>
+        <button class="checkout-button">Оформить заказ</button>
+        <button class="clear-cart" onclick="clearCart()">Очистить всё</button>
+      </div>
+      <div id="cart-items"></div>
+    </section>
+  </main>
+
+  <div class="footer" id="footer">
+    <h1 id="title">СВЯЗАТЬСЯ С НАМИ</h1>
+    <h2 href="ssclothing@mail.ru">ssclothing@mail.ru</h2>
+    <p id="agreement" href="#">Пользовательское соглашение</p>
+    <p id="delivery" href="#">Дополнительная информация</p>
+    <a>SS Clothing Store | Perm, Russia</a>
+  </div>
+
+  <script>
+    const products = [
+      { 
+        id: 1, 
+        title: "SS LOGO TEE in BLACK", 
+        description: "Saint Secret", 
+        price: 2000, 
+        image: "tee11.jpg",
+        secondaryImage: "tee12.jpg",
+        tertiaryImage: "size.jpg",
+        sizes: ["S", "M", "L"] // Возможные размеры
+      },
+      { 
+        id: 2, 
+        title: "SS LOGO TEE in WHITE", 
+        description: "Saint Secret", 
+        price: 2000, 
+        image: "tee21.jpg",
+        secondaryImage: "tee22.jpg",
+        tertiaryImage: "size.jpg",
+        sizes: ["S", "M", "L"] // Возможные размеры
+      }
+    ];
+
+    const cart = [];
+
+    function goHome() {
+      document.getElementById("home-page").style.display = "block";
+      document.getElementById("cart-page").style.display = "none";
+      document.querySelectorAll('main[id^="product-page-"]').forEach(page => page.style.display = "none");
+    }
+
+    cart.forEach(item => {
+      const product = products.find(p => p.id === item.productId);
+      console.log(`${product.title} - Количество: ${item.quantity}, Размер: ${item.size}`);
+    });
+
+    function openProductPage(id) {
+      const product = products.find((p) => p.id === id);
+
+      // Обновление изображений товара
+      document.getElementById(`product-main-image-${id}`).src = product.image;
+      document.getElementById(`product-secondary-image-${id}`).src = product.secondaryImage;
+      document.getElementById(`product-tertiary-image-${id}`).src = product.tertiaryImage;
+
+      // Обновление данных о товаре
+      document.getElementById(`product-title-${id}`).textContent = product.title;
+      document.getElementById(`product-description-${id}`).textContent = product.description;
+      document.getElementById(`product-price-${id}`).textContent = product.price;
+
+      // Показ подробной страницы товара
+      document.getElementById(`product-page-${id}`).style.display = "block";
+      document.getElementById("home-page").style.display = "none";
+    }
+
+    function goToCart() {
+      document.getElementById("home-page").style.display = "none";
+      document.getElementById("cart-page").style.display = "block";
+    }
+
+    function clearCart() {
+      cart.length = 0;
+      document.getElementById("cart-items").innerHTML = "";
+      document.getElementById("cart-count").textContent = "0";
+    }
+
+    function selectSize(button) {
+      // Remove active class from all size buttons
+      document.querySelectorAll('.size-button').forEach(btn => btn.classList.remove('active'));
+      
+      // Add active class to the selected size button
+      button.classList.add('active');
+      
+      // Enable the "Add to Cart" button for the current product
+      const productId = button.closest('main').id.split('-').pop();
+      const addToCartButton = document.getElementById(`add-to-cart-${productId}`);
+      addToCartButton.classList.add('active');
+      addToCartButton.disabled = false;
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const selectedSizeButton = document.querySelector('.size-button.active');
+
+      const selectedSize = selectedSizeButton.textContent.trim();
+
+      if (product) {
+        cart.push({ ...product, size: selectedSize });
+        document.getElementById("cart-count").textContent = cart.length;
+
+        // Обновление содержимого корзины
+        const cartItemsContainer = document.getElementById("cart-items");
+        const cartItemHTML = `
+          <div class="cart-item">
+            <img src="${product.image}" alt="${product.title}">
+            <div class="cart-item-details">
+              <h3>${product.title}</h3>
+              <p>size: ${selectedSize}</p>
+              <p>${product.price} ₽</p>
+            </div>
+            <button class="remove-item" onclick="removeFromCart(${id}, '${selectedSize}')">X</button>
+          </div>
+        `;
+        cartItemsContainer.insertAdjacentHTML("beforeend", cartItemHTML);
+
+        // Возврат на главный экран
+        goHome();
+      }
+    }
+
+
+    function updateCart() {
+      const cartItemsContainer = document.getElementById("cart-items");
+      cartItemsContainer.innerHTML = ""; // Clear previous items
+
+      cart.forEach(item => {
+        const cartItem = document.createElement("div");
+        cartItem.className = "cart-item";
+        cartItem.innerHTML = `
+          <img src="${item.image}" alt="${item.title}">
+          <div class="cart-item-details">
+            <h3>${item.title}</h3>
+            <p>Size: ${item.size}</p>
+            <p>Price: ${item.price} ₽</p>
+          </div>
+          <button class="remove-item" onclick="removeItem(${item.id}, '${item.size}')">✕</button>
+        `;
+        cartItemsContainer.appendChild(cartItem);
+      });
+
+      // Update cart count
+      document.getElementById("cart-count").textContent = cart.reduce((count, item) => count + item.quantity, 0);
+    }
+
+    function removeFromCart(id) {
+      const index = cart.findIndex(item => item.id === id);
+      if (index > -1) {
+        cart.splice(index, 1);
+        updateCart();
+      }
+    }
+  </script>
+</body>
+</html>
